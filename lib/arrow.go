@@ -261,6 +261,7 @@ func formatConvert(format string) string {
 		"%Z": "MST",
 		"%+": "Mon Jan _2 15:04:05 MST 2006",
 		"%%": "%%", // special case, see below
+		"%q": "1",
 	}
 
 	for fmt, conv := range strftimeMapping {
@@ -300,7 +301,6 @@ func CParseInStringLocation(layout, value, timezone string) (Arrow, error) {
 // See http://man7.org/linux/man-pages/man3/strftime.3.html for more info.
 func (a Arrow) CFormat(format string) string {
 	format = a.Format(formatConvert(format))
-
 	year, week := a.ISOWeek()
 	yearday := a.YearDay()
 	weekday := a.Weekday()
@@ -326,7 +326,6 @@ func (a Arrow) CFormat(format string) string {
 	} else {
 		format = strings.Replace(format, "%u", sweekday, -1)
 	}
-
 	format = strings.Replace(format, "%U", weekNumber(a, time.Sunday), -1)
 	format = strings.Replace(format, "%U", sweek, -1)
 	format = strings.Replace(format, "%w", sweekday, -1)
